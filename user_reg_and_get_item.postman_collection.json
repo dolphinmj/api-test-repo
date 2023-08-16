@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "0460b077-74be-45b7-9c14-f5016cb3a2ef",
+		"name": "User reg and get item",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2807501"
+	},
+	"item": [
+		{
+			"name": "register new",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"postman.clearEnvironmentVariable(\"access_token\");\r",
+							"\r",
+							"\r",
+							"tests['Response time is less than 200ms'] = responseTime < 200;\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"User created successfully\"] = jsonData.message === \"User created successfully.\";\r",
+							"tests['Content-Type is present in response'] = postman.getResponseHeader('Content-Type');\r",
+							"tests['Content-Type is application/json'] = postman.getResponseHeader('Content-Type') === 'application/json';\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"user4\",\r\n    \"password\": \"ajskdgh6\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests['Response time is less than 150ms'] = responseTime < 150;\r",
+							"tests['Response code is 200'] = responseCode.code === 200;\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"Access token returned\"] = jsonData.access_token != undefined;\r",
+							"postman.setEnvironmentVariable(\"access_token\", jsonData['access_token']);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"user4\",\r\n    \"password\": \"ajskdgh6\"\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}/auth",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "stores",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/stores",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"stores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "item Not Found",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests['Response time is less than 150ms'] = responseTime < 150;\r",
+							"tests['Response code is 404'] = responseCode.code === 404;\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"User created successfully\"] = jsonData.message === \"Item not found\";\r",
+							"tests['Content-Type is present in response'] = postman.getResponseHeader('Content-Type');\r",
+							"tests['Content-Type is application/json'] = postman.getResponseHeader('Content-Type') === 'application/json';\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "JWT {{access_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/item/test_item_not_found",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"item",
+						"test_item_not_found"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
