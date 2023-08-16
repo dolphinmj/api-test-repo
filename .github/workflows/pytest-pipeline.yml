@@ -1,4 +1,4 @@
-name: Python package
+name: Run all tests with Pytest
 
 on: [push]
 
@@ -23,4 +23,4 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Test with pytest
         run: |
-          pytest tests/ --cov
+          pytest tests/ --cov -v
